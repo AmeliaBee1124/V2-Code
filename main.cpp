@@ -8,8 +8,11 @@
 // Chassis constructor
 ez::Drive chassis(
     // These are your drive motors, the first motor is used for sensing!
-    {-9, -12, -10},     // Left Chassis Ports (negative port will reverse it!)
-    {11, 8, 7},  // Right Chassis Ports (negative port will reverse it!)
+    // {-15,-16,-12},     // Left Chassis Ports (negative port will reverse it!)
+    // {14,13,11},  // Right Chassis Ports (negative port will reverse it!)
+
+    {-14,-13,-11},     // Left Chassis Ports (negative port will reverse it!)
+    {15,16,12},  // Right Chassis Ports (negative port will reverse it!)
 
     11,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
@@ -30,13 +33,13 @@ ez::tracking_wheel horiz_tracker(19, 2, 4.0);  // This tracking wheel is perpend
  * Runs initialization code. This occurs as soon as the program is started.
  *
  * All other competition modes are blocked by initialize; it is recommended
- * to keep execution time for this mode under a few seconds.
+ * to keep execution time for this mode f6. under a few seconds.
  */
 void initialize() {
   // Print our branding over your terminal :D
   ez::ez_template_print();
 
-  hood.set(true);
+  hook.set(true);
   
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
@@ -65,9 +68,11 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
       //{"Distance Sensor Skills Left\n\ngood stuff", Main_Skills},
-      {"Red left\n\nTwo blocks in Two goals", red_left},
-      {"Backup Skills\n\ngood stuff", Backup_Skills},
-      {"Red Right\n\nTwo blocks in Two goals", red_right},
+      {"Red left S\n\nTwo blocks in Two goals", red_left_S},
+      {"Red left C\n\nTwo blocks in Two goals", red_left_C},
+     // {"Backup Skills\n\ngood stuff", Backup_Skills},
+      {"Red Right S\n\nTwo blocks in Two goals", red_right_S},
+      {"Red Right C\n\nTwo blocks in Two goals", red_right_C},
       {"Blue Left\n\nDo nothaing", blue_left},
       {"Blue Right\n\nTwo blocks in Two goals", blue_right},
       // {"Reg skills\n\ncool stuff", Reg_skills},
@@ -256,37 +261,47 @@ void opcontrol() {
     // Put more user control code here!
     // . . .
 
-    if (master.get_digital(DIGITAL_L2)) {
+    if (master.get_digital(DIGITAL_L1)) {
       outtake.move(127);
+      intake2.move(-127);
     } 
-    else if (master.get_digital(DIGITAL_L1)) {
+    else if (master.get_digital(DIGITAL_L2)) {
       outtake.move(-127);
+      intake2.move(127);
     } 
     else {
       outtake.move(0);
+      intake2.move(0);
+    }
+//.//
+    if (master.get_digital(DIGITAL_B)) {
+      intake2.move(-127);
+    } 
+    else if (master.get_digital(DIGITAL_B)) {
+      intake2.move(127);
+    } 
+    else {
+      intake2.move(0);
     }
 //.//
     if (master.get_digital(DIGITAL_R2)) {
       intake.move(127);
-      intake2.move(127);
     } 
     else if (master.get_digital(DIGITAL_R1)) {
       intake.move(-127);
-      intake2.move(-127);
     } 
     else {
       intake.move(0);
-      intake2.move(0);
     }    
 //.//
-    if (master.get_digital_new_press(DIGITAL_LEFT)) {
+  if (master.get_digital_new_press(DIGITAL_Y)) {
+    scrapper2.set(!scrapper2.get());
     scrapper.set(!scrapper.get());
   } 
 //.//
-  if (master.get_digital_new_press(DIGITAL_Y)) {
-    hood.set(!hood.get());
+  if (master.get_digital_new_press(DIGITAL_LEFT)) {
+    hook.set(!hook.get());
   } 
-//.//
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
 }
