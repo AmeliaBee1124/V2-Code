@@ -110,7 +110,7 @@ void Main_Skills() {
   chassis.pid_turn_set(-85_deg, 30, true);
   chassis.pid_wait();  
 
-  hood.set(false); //scoring code
+  hook.set(false); //scoring code
 
   chassis.pid_drive_set(7_in, 50, true);
   chassis.pid_wait();
@@ -164,7 +164,58 @@ void Main_Skills() {
 ///
 // Red Right
 ///
-void red_right() {
+void red_right_S() {
+
+  chassis.drive_angle_set(180_deg);
+
+  //Starts Motors Q12
+  intake.move(127);
+
+  outtake.move(-127);
+
+  // pros::delay(3000);
+
+  //Drives forward slightly and then turn to first block 
+  chassis.pid_drive_set(-8.5_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_swing_set(ez::LEFT_SWING, 90_deg, 60);
+  chassis.pid_wait();
+
+  //move forward to second block then turn to third block
+  chassis.pid_drive_set(-3_in, 60, true);
+  chassis.pid_wait();
+
+  chassis.pid_swing_set(ez::RIGHT_SWING, 0_deg, 60);
+  chassis.pid_wait();
+  
+  chassis.pid_drive_set(8_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-12_in, 50, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-5.5_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  hook.set(false);
+
+  // basket.move(127);
+
+  outtake.move(-127);
+
+  pros::delay(6000);
+
+}
+
+
+void red_right_C() {
 
   chassis.drive_angle_set(0_deg);
 
@@ -204,7 +255,7 @@ void red_right() {
   chassis.pid_drive_set(5.5_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  hood.set(false);
+  hook.set(false);
 
   // basket.move(127);
 
@@ -213,7 +264,6 @@ void red_right() {
   pros::delay(6000);
 
 }
-
 
 ///
 ///
@@ -269,7 +319,7 @@ void Backup_Skills() {
   chassis.pid_drive_set(2.5_in, DRIVE_SPEED, true);
   chassis.pid_wait(); 
 
-  hood.set(false); //scoring code
+  hook.set(false); //scoring code
   outtake.move(-127);    //scoring code
   intake.move(127);  //scoring code
   // basket.move(127); //scoring code
@@ -369,7 +419,7 @@ void Backup_Skills_Right() {
 
   intake.move(127);  //scoring code
   // basket.move(127);
-  hood.set(false);
+  hook.set(false);
 
   chassis.pid_drive_set(4_in, DRIVE_SPEED, true);
   chassis.pid_wait(); 
@@ -460,7 +510,7 @@ void Backup_Skills_Right() {
 ///
 // Red Left
 ///
-void red_left() {
+void red_left_C() {
 
   chassis.drive_angle_set(0_deg);
 
@@ -482,7 +532,7 @@ void red_left() {
   chassis.pid_drive_set(1_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_turn_set(-135_deg, TURN_SPEED);
   chassis.pid_wait();
 
   pros::delay(2000);
@@ -499,6 +549,51 @@ void red_left() {
   outtake.move(0);
 
   chassis.pid_drive_set(-6_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+}
+
+// Red Left
+///
+void red_left_S() {
+
+  chassis.drive_angle_set(180_deg);
+
+  //Starts Motors
+  intake.move(127);
+
+  outtake.move(-127);
+
+  //Drives forward slightly and then turn to first block 
+  chassis.pid_drive_set(-6_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_swing_set(ez::RIGHT_SWING, -90_deg, 60);
+  chassis.pid_wait();
+
+  chassis.pid_swing_set(ez::LEFT_SWING, 0_deg, 60);
+  chassis.pid_wait();
+  
+  chassis.pid_drive_set(-1_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(-135_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  pros::delay(2000);
+
+  // basket.move(127);
+
+  chassis.pid_drive_set(-5_in, DRIVE_SPEED, true);
+  chassis.pid_wait();
+
+  outtake.move(80);
+
+  pros::delay(6000);
+
+  outtake.move(0);
+
+  chassis.pid_drive_set(6_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
 }
