@@ -268,47 +268,68 @@ void opcontrol() {
     // Put more user control code here!
     // . . .
 
-    if (master.get_digital(DIGITAL_L1)) {
-      outtake.move(-127);
-      intake2.move(127);
-    } 
-    else if (master.get_digital(DIGITAL_L2)) {
-      outtake.move(127);
-      intake2.move(-127);
-    } 
-    else {
-      outtake.move(0);
-      intake2.move(0);
-    }
-//.//
-    if (master.get_digital(DIGITAL_L1)) {
-      intake2.move(-127);
-    } 
-    else if (master.get_digital(DIGITAL_L2)) {
-      intake2.move(127);
-    } 
-    else {
-      intake2.move(0);
-    }
-//.//
-    if (master.get_digital(DIGITAL_R2)) {
-      intake.move(-127);
-    } 
-    else if (master.get_digital(DIGITAL_R1)) {
-      intake.move(127);
-    } 
-    else {
-      intake.move(0);
-    }    
-//.//
-  if (master.get_digital_new_press(DIGITAL_Y)) {
-    scrapper2.set(!scrapper2.get());
-    scrapper.set(!scrapper.get());
+//     if (master.get_digital(DIGITAL_L1)) {
+//       outtake.move(-127);
+//       intake2.move(127);
+//     } 
+//     else if (master.get_digital(DIGITAL_L2)) {
+//       outtake.move(127);
+//       intake2.move(-127);
+//     } 
+//     else {
+//       outtake.move(0);
+//       intake2.move(0);
+//     }
+// //.//
+//     if (master.get_digital(DIGITAL_L1)) {
+//       intake2.move(-127);
+//     } 
+//     else if (master.get_digital(DIGITAL_L2)) {
+//       intake2.move(127);
+//     } 
+//     else {
+//       intake2.move(0);
+//     }
+// //.//
+//     if (master.get_digital(DIGITAL_R2)) {
+//       intake.move(-127);
+//     } 
+//     else if (master.get_digital(DIGITAL_R1)) {
+//       intake.move(127);
+//     } 
+//     else {
+//       intake.move(0);
+//     }    
+// //.//
+//   if (master.get_digital_new_press(DIGITAL_Y)) {
+//     scrapper2.set(!scrapper2.get());
+//     scrapper.set(!scrapper.get());
+//   } 
+// //.//
+//   if (master.get_digital_new_press(DIGITAL_LEFT)) {
+//     hook.set(!hook.get());
+//   } 
+
+
+if (master.get_digital(DIGITAL_LEFT)) {
+  //lower
+    intake.move(-127);
+    intake2.move(127);
+    outtake.move(127);
   } 
-//.//
-  if (master.get_digital_new_press(DIGITAL_LEFT)) {
-    hook.set(!hook.get());
+if (master.get_digital(DIGITAL_RIGHT)) {
+  //high
+    intake.move(127);
+    intake2.move(-127);
+    outtake.move(-127);
   } 
+if (master.get_digital(DIGITAL_DOWN)) {
+  //middle
+    intake.move(127);
+    intake2.move(-127);
+    outtake.move(127);
+  } 
+
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
 }
