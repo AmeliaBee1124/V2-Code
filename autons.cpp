@@ -102,7 +102,6 @@ void Main_Skills() {
   scrapper.set(true);  //scoring code
 
   intake.move(-127);
-
   pros::delay(1000);
 
   intake.move(0);
@@ -119,6 +118,7 @@ void Main_Skills() {
 
   outtake.move(-127);    //scoring code
   intake.move(127);  //scoring code
+  intake2.move(-127);
 
   pros::delay(8000);
 
@@ -246,20 +246,21 @@ void red_right_C() {
   chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(12_in, 50, true);
+  chassis.pid_drive_set(20_in, 50, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_turn_set(180_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(5.5_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  hook.set(false);
+  intake2.move(127);
+  outtake.move(127);
 
   // basket.move(127);
 
-  outtake.move(-127);
+  // outtake.move(-127);
 
   pros::delay(6000);
 
@@ -568,16 +569,16 @@ void red_left_S() {
   chassis.pid_drive_set(-6_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  chassis.pid_swing_set(ez::RIGHT_SWING, -90_deg, 60);
+  chassis.pid_swing_set(ez::LEFT_SWING, 90_deg, 60);
   chassis.pid_wait();
 
-  chassis.pid_swing_set(ez::LEFT_SWING, 0_deg, 60);
+  chassis.pid_swing_set(ez::RIGHT_SWING, 180_deg, 60);
   chassis.pid_wait();
   
   chassis.pid_drive_set(-1_in, DRIVE_SPEED, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(-135_deg, TURN_SPEED);
+  chassis.pid_turn_set(-45_deg, TURN_SPEED);
   chassis.pid_wait();
 
   pros::delay(2000);
@@ -603,18 +604,39 @@ void red_left_S() {
 ///
 void blue_right() {
 
-  scrapper.set(true);
+  scrapper.set(false);
   
-  chassis.drive_angle_set(0_deg);
+  chassis.drive_angle_set(150_deg);
 
   //Starts Motors
-  intake.move(127);
+  intake.move(-127);
 
-  outtake.move(-127);
-
-  chassis.pid_drive_set(36_in, 50, true);
+  chassis.pid_drive_set(30_in, 70, true);
   chassis.pid_wait();
 
+  chassis.pid_drive_set(-6_in, 70, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-15_in, 70, true);
+  chassis.pid_wait();
+
+  intake2.move(-127);
+
+  pros::delay(2500);
+
+  chassis.pid_drive_set(40_in, 70, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_wait();
+  
+  scrapper.set(true);
+
+  chassis.pid_drive_set(10_in, 70, true);
+  chassis.pid_wait();
 }
 
 ///
