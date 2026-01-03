@@ -5,660 +5,343 @@
 // https://ez-robotics.github.io/EZ-Template/
 /////
 
-// These are out of 127
-const int DRIVE_SPEED = 110;
-const int TURN_SPEED = 90;
-const int SWING_SPEED = 110;
+// Chassis constructor
+ez::Drive chassis(
+    // These are your drive motors, the first motor is used for sensing!
+    // {-15,-16,-12},     // Left Chassis Ports (negative port will reverse it!)Songhao
+    // {14,13,11},  // Right Chassis Ports (negative port will reverse it!) 
 
-///
-// Constants
-///
-void default_constants() {
-  // P, I, D, and Start I
-  chassis.pid_drive_constants_set(20.0, 0.0, 100.0);         // Fwd/rev constants, used for odom and non odom motions
-  chassis.pid_heading_constants_set(11.0, 0.0, 20.0);        // Holds the robot straight while going forward without odom
-  chassis.pid_turn_constants_set(3.0, 0.05, 20.0, 15.0);     // Turn in place constants
-  chassis.pid_swing_constants_set(6.0, 0.0, 65.0);           // Swing constants
-  chassis.pid_odom_angular_constants_set(6.5, 0.0, 52.5);    // Angular control for odom motions
-  chassis.pid_odom_boomerang_constants_set(5.8, 0.0, 32.5);  // Angular control for boomerang motions
+    // {-7,9,-12},     // Left Chassis Ports (negative port will reverse it!)Songhao 3rd
+    // {-20,10,8},  // Right Chassis Ports (negative port will reverse it!) 
 
-  // Exit conditions
-  chassis.pid_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 500_ms);
-  chassis.pid_swing_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 500_ms);
-  chassis.pid_drive_exit_condition_set(90_ms, 1_in, 250_ms, 3_in, 500_ms, 500_ms);
-  chassis.pid_odom_turn_exit_condition_set(90_ms, 3_deg, 250_ms, 7_deg, 500_ms, 750_ms);
-  chassis.pid_odom_drive_exit_condition_set(90_ms, 1_in, 250_ms, 3_in, 500_ms, 750_ms);
-  chassis.pid_turn_chain_constant_set(3_deg);
-  chassis.pid_swing_chain_constant_set(5_deg);
-  chassis.pid_drive_chain_constant_set(3_in);
+    {20,-10,-8},     // Left Chassis Ports (negative port will reverse it!)Songhao 3rd
+    {7,-9,12},  // Right Chassis Ports (negative port will reverse it!) 
 
-  // Slew constants
-  chassis.slew_turn_constants_set(3_deg, 70);
-  chassis.slew_drive_constants_set(3_in, 70);
-  chassis.slew_swing_constants_set(3_in, 80);
+    // {-14,-13,-11},     // Left Chassis Ports (negative port will reverse it!)Carl
+    // {15,16,12},  // Right Chassis Ports (negative port will reverse it!)
 
-  // The amount that turns are prioritized over driving in odom motions
-  // - if you have tracking wheels, you can run this higher.  1.0 is the max
-  chassis.odom_turn_bias_set(0.9);
-
-  chassis.odom_look_ahead_set(7_in);           // This is how far ahead in the path the robot looks at
-  chassis.odom_boomerang_distance_set(16_in);  // This sets the maximum distance away from target that the carrot point can be
-  chassis.odom_boomerang_dlead_set(0.625);     // This handles how aggressive the end of boomerang motions are
-
-  chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
-}
-
-
-// Red Right
-///
-void Main_Skills() {
+    18,      // IMU Port
+    2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
+    450
   
-  chassis.pid_drive_set(13_in, DRIVE_SPEED, true); 
   
-  chassis.pid_wait();
+  );   // Wheel RPM = cartridge * (motor gear / wheel gear)
 
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
-  chassis.pid_wait();
+// Uncomment the trackers you're using here!
+// - `8` and `9` are smart ports (making these negative will reverse the sensor)
+//  - you should get positive values on the encoders going FORWARD and RIGHT
+// - `2.75` is the wheel diameter
+// - `4.0` is the distance from the center of the wheel to the center of the robot
+ez::tracking_wheel horiz_tracker(19, 2, 4.0);  // This tracking wheel is perpendicular to the drive wheels
+// ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
 
+/**
+ * Runs initialization code. This occurs as soon as the program is started.
+ *
+ * All other competition modes are blocked by initialize; it is recommended
+ * to keep execution time for this mode f6. under a few seconds.
+ */
+void initialize() {
+  // Print our branding over your terminal :D
+  ez::ez_template_print();
+
+  hook.set(true);
   scrapper.set(false);
-  outtake.move(-127);
-  intake.move(-127);
+  // chassis.drive_angle_set(180_deg);
   
-  pros::delay(500);
 
-  chassis.pid_drive_set(12_in, 127, false);
-  chassis.pid_wait();
-  // int distance = distancesensor.get();
-  // for (int i = 0; i < 2; i++){
-  //   intake.move(127);
-  //   chassis.pid_drive_set(4_in, 127, false); //moving forward during intake
-  //   chassis.pid_wait();
-  //   pros::delay(400);
-  //   chassis.pid_drive_set(-1_in, 127, false); //moving forward during intake
-  //   chassis.pid_wait();
-  //   intake.move(0);
-  //   pros::delay(200);
-  // }
-  
-  // if (true)){
-  for (int i = 0; i < 3; i++){
-    intake.move(127);
-    chassis.pid_drive_set(2.5_in, 127, false); //moving forward during intake
-    chassis.pid_wait();
-    pros::delay(400);
-    chassis.pid_drive_set(-1_in, 127, false); //moving forward during intake
-    chassis.pid_wait();
-    intake.move(0);
-    pros::delay(200);
-  }
-  
-  intake.move(127);
+  pros::delay(500);  // Stop the user from doing anything while legacy ports configure
 
-  pros::delay(2000);
+  // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
+  //  - change `back` to `front` if the tracking wheel is in front of the midline
+  //  - ignore this if you aren't using a horizontal tracker
+  chassis.odom_tracker_back_set(&horiz_tracker);
+  // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
+  //  - change `left` to `right` if the tracking wheel is to the right of the centerline
+  //  - ignore this if you aren't using a vertical tracker
+  // chassis.odom_tracker_left_set(&vert_tracker);
 
-  chassis.pid_drive_set(-3.5_in, 50, true);
-  chassis.pid_wait();
+  // Configure your chassis controls
+  chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
+  chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
+  chassis.opcontrol_curve_default_set(0.0, 0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 
-  scrapper.set(true);  //scoring code
+  // Set the drive to your own constants from autons.cpp!
+  default_constants();
 
-  intake.move(-127);
-  pros::delay(1000);
+  // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
+  //chassis.opcontrol_curve_buttons_left_set(pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT);  // If using tank, only the left side is used.
+  // chassis.opcontrol_curve_buttons_right_set(pros::E_CONTROLLER_DIGITAL_Y, pros::E_CONTROLLER_DIGITAL_A);
 
-  intake.move(0);
+  // Autonomous Selector using LLEMU
+  ez::as::auton_selector.autons_add({
+      {"Third Robot skills\n\ngood stuff", Main_Skills},
+      {"Blue Right\n\nThis says blue right but its actually new left side third robot Songhao drive. I'm to lazy to make a new program", blue_right},
+      {"Red left S\n\nTwo blocks in Two goals", red_left_S},
+      {"Red left C\n\nTwo blocks in Two goals", red_left_C},
+     // {"Backup Skills\n\ngood stuff", Backup_Skills},
+      //{"Red Right S\n\nTwo blocks in Two goals", red_right_S},
+      {"Red Right C\n\nTwo blocks in Two goals", red_right_C},
+      {"Blue Left\n\nDo nothaing", blue_left},
+      // {"Reg skills\n\ncool stuff", Reg_skills},
+  });
 
-  chassis.pid_turn_set(-85_deg, 30, true);
-  chassis.pid_wait();  
-
-  hook.set(false); //scoring code
-
-  chassis.pid_drive_set(7_in, 50, true);
-  chassis.pid_wait();
-
-  // basket.move(127); //scoring code
-
-  outtake.move(-127);    //scoring code
-  intake.move(127);  //scoring code
-  intake2.move(-127);
-
-  pros::delay(8000);
-
-  // outtake.move(0);    //scoring code
-  // intake.move(0);  //scoring code
-  // basket.move(0); //scoring code
-
-  // for (int i = 0; i < 5; i++){
-  //   chassis.pid_drive_set(4_in, 127, false); //moving forward during intake
-  //   chassis.pid_wait();
-  //   pros::delay(50);
-  //   chassis.pid_drive_set(-5_in, 127, false); //moving forward during intake
-  //   pros::delay(50);
-  // }
-
-  // chassis.pid_drive_set(-0.5_in, DRIVE_SPEED, true);
-  // chassis.pid_wait(); 
-
-  // outtake.move(-127);    //scoring code
-  // intake.move(127);  //scoring code
-  // basket.move(127); //scoring code
-
-  // pros::delay(15000);
-
-  chassis.pid_drive_set(-5_in, DRIVE_SPEED, true);
-  chassis.pid_wait(); 
-
-  chassis.pid_turn_set(-180_deg, 30, true);
-  chassis.pid_wait();  
-
-  chassis.pid_drive_set(45_in, DRIVE_SPEED, true);
-  chassis.pid_wait(); 
-
-  chassis.pid_turn_set(90_deg, 50, true);
-  chassis.pid_wait();  
-
-  chassis.pid_drive_set(20_in, DRIVE_SPEED, true);
-  chassis.pid_wait(); 
-
+  // Initialize chassis and auton selector
+  chassis.initialize();
+  ez::as::initialize();
+  //master.rumble(chassis.drive_imu_calibrated() ? "." : "---");
 }
 
-
-///
-// Red Right
-///
-void red_right_S() {
-
-  chassis.drive_angle_set(180_deg);
-
-  //Starts Motors Q12
-  intake.move(127);
-
-  outtake.move(-127);
-
-  // pros::delay(3000);
-
-  //Drives forward slightly and then turn to first block 
-  chassis.pid_drive_set(-8.5_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_swing_set(ez::LEFT_SWING, 90_deg, 60);
-  chassis.pid_wait();
-
-  //move forward to second block then turn to third block
-  chassis.pid_drive_set(-3_in, 60, true);
-  chassis.pid_wait();
-
-  chassis.pid_swing_set(ez::RIGHT_SWING, 0_deg, 60);
-  chassis.pid_wait();
-  
-  chassis.pid_drive_set(8_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(-12_in, 50, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(-5.5_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  hook.set(false);
-
-  // basket.move(127);
-
-  outtake.move(-127);
-
-  pros::delay(6000);
-
+/**
+ * Runs while the robot is in the disabled state of Field Management System or
+ * the VEX Competition Switch, following either autonomous or opcontrol. When
+ * the robot is enabled, this task will exit.
+ */
+void disabled() {
+  // . . .
 }
 
-
-void red_right_C() {
-
-  chassis.drive_angle_set(0_deg);
-
-  //Starts Motors Q12
-  intake.move(127);
-
-  outtake.move(-127);
-
-  // pros::delay(3000);
-
-  //Drives forward slightly and then turn to first block 
-  chassis.pid_drive_set(8.5_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_swing_set(ez::LEFT_SWING, 90_deg, 60);
-  chassis.pid_wait();
-
-  //move forward to second block then turn to third block
-  chassis.pid_drive_set(3_in, 60, true);
-  chassis.pid_wait();
-
-  chassis.pid_swing_set(ez::RIGHT_SWING, 0_deg, 60);
-  chassis.pid_wait();
-  
-  chassis.pid_drive_set(-8_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(20_in, 50, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(180_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(5.5_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  intake2.move(127);
-  outtake.move(127);
-
-  // basket.move(127);
-
-  // outtake.move(-127);
-
-  pros::delay(6000);
-
+/**
+ * Runs after initialize(), and before autonomous when connected to the Field
+ * Management System or the VEX Competition Switch. This is intended for
+ * competition-specific initialization routines, such as an autonomous selector
+ * on the LCD.
+ *
+ * This task will exit when the robot is enabled and autonomous or opcontrol
+ * starts.
+ */
+void competition_initialize() {
+  // . . .
 }
 
-///
-///
-void Backup_Skills() {
+/**
+ * Runs the user autonomous code. This function will be started in its own task
+ * with the default priority and stack size whenever the robot is enabled via
+ * the Field Management System or the VEX Competition Switch in the autonomous
+ * mode. Alternatively, this function may be called in initialize or opcontrol
+ * for non-competition testing purposes.
+ *
+ * If the robot is disabled or communications is lost, the autonomous task
+ * will be stopped. Re-enabling the robot will restart the task, not re-start it
+ * from where it left off.
+ */
+void autonomous() {
+  chassis.pid_targets_reset();                // Resets PID targets to 0
+  chassis.drive_imu_reset();                  // Reset gyro position to 0
+  chassis.drive_sensor_reset();               // Reset drive sensors to 0
+  chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
+  chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
 
-  scrapper.set(true);
- 
-  chassis.pid_drive_set(13_in, DRIVE_SPEED, true); 
-  
-  chassis.pid_wait();
+  /*
+  Odometry and Pure Pursuit are not magic
 
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  outtake.move(-127);
-  intake.move(-127);
-  pros::delay(500);
-  chassis.pid_drive_set(30_in, 127, false);
-  chassis.pid_wait();
-  
-  pros::delay(15000);
-  /*for (int i = 0; i < 4; i++){
-    intake.move(127);
-    outtake.move(0);
-    chassis.pid_drive_set(4_in, 127, false); //moving forward during intake
-    chassis.pid_wait();
-    outtake.move(-127);
-    pros::delay(500);
-    chassis.pid_drive_set(-1_in, 127, false); //moving forward during intake
-    chassis.pid_wait();
-    intake.move(0);
-    pros::delay(200);
-  }*/
-
-  intake.move(127);
-
-  pros::delay(2000);
-
-  chassis.pid_drive_set(-3.5_in, 50, true);
-  chassis.pid_wait();
-
-  scrapper.set(false);  //scoring code
-
-  intake.move(-127);
-
-  pros::delay(1000);
-
-  intake.move(0);
-
-  chassis.pid_turn_set(85_deg, 30, true);
-  chassis.pid_wait();  
-
-  chassis.pid_drive_set(2.5_in, DRIVE_SPEED, true);
-  chassis.pid_wait(); 
-
-  hook.set(false); //scoring code
-  outtake.move(-127);    //scoring code
-  intake.move(127);  //scoring code
-  // basket.move(127); //scoring code
-
-  pros::delay(4000);
-
-  outtake.move(0);    //scoring code
-  intake.move(0);  //scoring code
-  // basket.move(0); //scoring code
-
-  for (int i = 0; i < 5; i++){
-    chassis.pid_drive_set(4_in, 127, false); //moving forward during intake
-    chassis.pid_wait();
-    pros::delay(50);
-    chassis.pid_drive_set(-5_in, 127, false); //moving forward during intake
-    pros::delay(50);
-  }
-
-  chassis.pid_drive_set(-0.5_in, DRIVE_SPEED, true);
-  chassis.pid_wait(); 
-
-  outtake.move(-127);    //scoring code
-  intake.move(127);  //scoring code
-  // basket.move(127); //scoring code
-
-  pros::delay(15000);
-
-
-  chassis.pid_drive_set(-3_in, DRIVE_SPEED, true);
-  chassis.pid_wait(); 
-
-  chassis.pid_turn_set(-180_deg, 30, true);
-  chassis.pid_wait();  
-
-  chassis.pid_drive_set(19_in, DRIVE_SPEED, true);
-  chassis.pid_wait(); 
-
-  chassis.pid_turn_set(-90_deg, 50, true);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(-5_in, DRIVE_SPEED, true);
-  chassis.pid_wait(); 
-
-  chassis.pid_drive_set(30_in, DRIVE_SPEED, true);
-  chassis.pid_wait(); 
-}
-
-void Backup_Skills_Right() {
-
-  chassis.pid_drive_set(13_in, DRIVE_SPEED, true); 
-  
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  scrapper.set(false);
-  outtake.move(-127);
-  intake.move(-127);
-  
-  chassis.pid_drive_set(12_in, 127, false);
-  chassis.pid_wait();
-
-  
-  
-  /*for (int i = 0; i < 2; i++){
-    intake.move(127);
-    chassis.pid_drive_set(4_in, 127, false); //moving forward during intake
-    chassis.pid_wait();
-    pros::delay(500);
-    chassis.pid_drive_set(-1_in, 127, false); //moving forward during intake
-    chassis.pid_wait();
-    intake.move(0);
-    pros::delay(200);
-  }*/
- 
-  // for (int i = 0; i < 5; i++){
-  //   intake.move(127);
-  //   chassis.pid_drive_set(2.5_in, 127, false); //moving forward during intake
-  //   chassis.pid_wait();
-  //   pros::delay(400);
-  //   chassis.pid_drive_set(-1_in, 127, false); //moving forward during intake
-  //   chassis.pid_wait();
-  //   intake.move(0);
-  //   pros::delay(200);
-  // }
-  
-  chassis.pid_drive_set(-3.5_in, 50, true);
-  chassis.pid_wait();
-
-  scrapper.set(true);  //scoring code
-
-  intake.move(0);
-
-  chassis.pid_turn_set(-90_deg, 30, true);
-  chassis.pid_wait();  
-
-  intake.move(127);  //scoring code
-  // basket.move(127);
-  hook.set(false);
-
-  chassis.pid_drive_set(4_in, DRIVE_SPEED, true);
-  chassis.pid_wait(); 
-  
-//  hood.set(false); //scoring code
-  // outtake.move(-127);    //scoring code
-  //intake.move(127);  //scoring code
-  //basket.move(127); //scoring code
-
-  pros::delay(11000);
-
-  // outtake.move(0);    //scoring code
-  // intake.move(0);  //scoring code
-  // basket.move(0); //scoring code
-
-  // for (int i = 0; i < 5; i++){
-  //   chassis.pid_drive_set(4_in, 127, false); //moving forward during intake
-  //   chassis.pid_wait();
-  //   pros::delay(50);
-  //   chassis.pid_drive_set(-5_in, 127, false); //moving forward during intake
-  //   pros::delay(50);
-  // }
-
-  // chassis.pid_drive_set(-0.5_in, DRIVE_SPEED, true);
-  // chassis.pid_wait(); 
-
-  // outtake.move(-127);    //scoring code
-  // intake.move(127);  //scoring code
-  // basket.move(127); //scoring code
-
-  // pros::delay(7000);
-  }
-  /* add for skills if dependable
-  chassis.drive_angle_set(0_deg);
-
-  //Starts Motors
-  intake.move(127);
-
-  outtake.move(-127);
-
-  //Drives forward slightly and then turn to first block 
-  chassis.pid_drive_set(7_in, DRIVE_SPEED, true);
-
- chassis.pid_wait();
-
-  chassis.pid_swing_set(ez::LEFT_SWING, 90_deg, 60);
-  chassis.pid_wait();
-
-  //move forward to second block then turn to third block
-  chassis.pid_drive_set(3_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_swing_set(ez::RIGHT_SWING, 0_deg, 60);
-  chassis.pid_wait();
-  
-  chassis.pid_drive_set(-2_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(-45_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  basket.move(127);
-
-  chassis.pid_drive_set(8_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  outtake.move(127);
-
-  pros::delay(1500);
-
-  outtake.move(-127);
-
-  chassis.pid_drive_set(-20_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(7_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  hood.set(true);
-
-  pros::delay(4000);
+  It is possible to get perfectly consistent results without tracking wheels,
+  but it is also possible to have extremely inconsistent results without tracking wheels.
+  When you don't use tracking wheels, you need to:
+   - avoid wheel slip
+   - avoid wheelies
+   - avoid throwing momentum around (super harsh turns, like in the example below)
+  You can do cool curved motions, but you have to give your robot the best chance
+  to be consistent
   */
 
-
-///
-// Red Left
-///
-void red_left_C() {
-
-  chassis.drive_angle_set(0_deg);
-
-  //Starts Motors
-  intake.move(127);
-
-  outtake.move(-127);
-
-  //Drives forward slightly and then turn to first block 
-  chassis.pid_drive_set(6_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_swing_set(ez::RIGHT_SWING, -90_deg, 60);
-  chassis.pid_wait();
-
-  chassis.pid_swing_set(ez::LEFT_SWING, 0_deg, 60);
-  chassis.pid_wait();
-  
-  chassis.pid_drive_set(1_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(-135_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  pros::delay(2000);
-
-  // basket.move(127);
-
-  chassis.pid_drive_set(5_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  outtake.move(80);
-
-  pros::delay(6000);
-
-  outtake.move(0);
-
-  chassis.pid_drive_set(-6_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
+  ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 }
 
-// Red Left
-///
-void red_left_S() {
-
-  chassis.drive_angle_set(180_deg);
-
-  //Starts Motors
-  intake.move(127);
-
-  outtake.move(-127);
-
-  //Drives forward slightly and then turn to first block 
-  chassis.pid_drive_set(-6_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_swing_set(ez::LEFT_SWING, 90_deg, 60);
-  chassis.pid_wait();
-
-  chassis.pid_swing_set(ez::RIGHT_SWING, 180_deg, 60);
-  chassis.pid_wait();
-  
-  chassis.pid_drive_set(-1_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(-45_deg, TURN_SPEED);
-  chassis.pid_wait();
-
-  pros::delay(2000);
-
-  // basket.move(127);
-
-  chassis.pid_drive_set(-5_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
-  outtake.move(80);
-
-  pros::delay(6000);
-
-  outtake.move(0);
-
-  chassis.pid_drive_set(6_in, DRIVE_SPEED, true);
-  chassis.pid_wait();
-
+/**
+ * Simplifies printing tracker values to the brain screen
+ */
+void screen_print_tracker(ez::tracking_wheel *tracker, std::string name, int line) {
+  std::string tracker_value = "", tracker_width = "";
+  // Check if the tracker exists
+  if (tracker != nullptr) {
+    tracker_value = name + " tracker: " + util::to_string_with_precision(tracker->get());             // Make text for the tracker value
+    tracker_width = "  width: " + util::to_string_with_precision(tracker->distance_to_center_get());  // Make text for the distance to center
+  }
+  ez::screen_print(tracker_value + tracker_width, line);  // Print final tracker text
 }
 
-///
-// Blue Right
-///
-void blue_right() {
+/**
+ * Ez screen task
+ * Adding new pages here will let you view them during user control or autonomous
+ * and will help you debug problems you're having
+ */
+void ez_screen_task() {
+  while (true) {
+    // Only run this when not connected to a competition switch
+    if (!pros::competition::is_connected()) {
+      // Blank page for odom debugging
+      if (chassis.odom_enabled() && !chassis.pid_tuner_enabled()) {
+        // If we're on the first blank page...
+        if (ez::as::page_blank_is_on(0)) {
+          // Display X, Y, and Theta
+          ez::screen_print("x: " + util::to_string_with_precision(chassis.odom_x_get()) +
+                               "\ny: " + util::to_string_with_precision(chassis.odom_y_get()) +
+                               "\na: " + util::to_string_with_precision(chassis.odom_theta_get()),
+                           1);  // Don't override the top Page line
 
-  scrapper.set(false);
-  
-  chassis.drive_angle_set(150_deg);
+          // Display all trackers that are being used
+          screen_print_tracker(chassis.odom_tracker_left, "l", 4);
+          screen_print_tracker(chassis.odom_tracker_right, "r", 5);
+          screen_print_tracker(chassis.odom_tracker_back, "b", 6);
+          screen_print_tracker(chassis.odom_tracker_front, "f", 7);
+        }
+      }
+    }
 
-  //Starts Motors
-  intake.move(-127);
+    // Remove all blank pages when connected to a comp switch
+    else {
+      if (ez::as::page_blank_amount() > 0)
+        ez::as::page_blank_remove_all();
+    }
 
-  chassis.pid_drive_set(30_in, 70, true);
-  chassis.pid_wait();
+    pros::delay(ez::util::DELAY_TIME);
+  }
+}
+pros::Task ezScreenTask(ez_screen_task);
 
-  chassis.pid_drive_set(-6_in, 70, true);
-  chassis.pid_wait();
+/**
+ * Gives you some extras to run in your opcontrol:
+ * - run your autonomous routine in opcontrol by pressing DOWN and B
+ *   - to prevent this from accidentally happening at a competition, this
+ *     is only enabled when you're not connected to competition control.
+ * - gives you a GUI to change your PID values live by pressing X
+ */
+void ez_template_extras() {
+  // Only run this when not connected to a competition switch
+  if (!pros::competition::is_connected()) {
+    // PID Tuner
+    // - after you find values that you're happy with, you'll have to set them in auton.cpp
 
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
+    // Enable / Disable PID Tuner
+    //  When enabled:
+    //  * use A and Y to increment / decrement the constants
+    //  * use the arrow keys to navigate the constants
+    if (master.get_digital_new_press(DIGITAL_X))
+      chassis.pid_tuner_toggle();
 
-  chassis.pid_drive_set(-15_in, 70, true);
-  chassis.pid_wait();
+    // Trigger the selected autonomous routine
+    if (master.get_digital(DIGITAL_RIGHT)) {
+      pros::motor_brake_mode_e_t preference = chassis.drive_brake_get();
+      autonomous();
+      chassis.drive_brake_set(preference);
+    }
 
-  intake2.move(-127);
+    // Allow PID Tuner to iterate
+    chassis.pid_tuner_iterate();
+  }
 
-  pros::delay(2500);
-
-  chassis.pid_drive_set(40_in, 70, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
-  
-  scrapper.set(true);
-
-  chassis.pid_drive_set(10_in, 70, true);
-  chassis.pid_wait();
+  // Disable PID Tuner when connected to a comp switch
+  else {
+    if (chassis.pid_tuner_enabled())
+      chassis.pid_tuner_disable();
+  }
 }
 
-///
-// Blue Left
-///
-void blue_left() {
+/**
+ * Runs the operator control code. This function will be started in its own task
+ * with the default priority and stack size whenever the robot is enabled via
+ * the Field Management System or the VEX Competition Switch in the operator
+ * control mode.
+ *
+ * If no competition control is connected, this function will run immediately
+ * following initialize().
+ *
+ * If the robot is disabled or communications is lost, the
+ * operator control task will be stopped. Re-enabling the robot will restart the
+ * task, not resume it from where it left off.
+ */
+void opcontrol() {
+  // This is preference to what you like to drive on
+  chassis.drive_brake_set(MOTOR_BRAKE_COAST);
 
-}
+  while (true) {
+    // Gives you some extras to make EZ-Template ezier
+    ez_template_extras();
 
-///
-// Turn Example
-///
-void turn_example() {
-  // The first parameter is the target in degrees
-  // The second parameter is max speed the robot will drive at
+    // chassis.opcontrol_tank();  // Tank control
+    chassis.opcontrol_arcade_standard(ez::SPLIT);   // Standard split arcade
+    // chassis.opcontrol_arcade_standard(ez::SINGLE);  // Standard single arcade
+    // chassis.opcontrol_arcade_flipped(ez::SPLIT);    // Flipped split arcade
+    // chassis.opcontrol_arcade_flipped(ez::SINGLE);   // Flipped single arcade
 
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
-  chassis.pid_wait();
+    // . . .
+    // Put more user control code here!
+    // . . .
 
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
-  chassis.pid_wait();
+    if (master.get_digital(DIGITAL_L1)) {
+      outtake.move(-127);
+      intake2.move(127);
+    } 
+    else if (master.get_digital(DIGITAL_L2)) {
+      outtake.move(127);
+      intake2.move(-127);
+    } 
+    else {
+      outtake.move(0);
+      intake2.move(0);
+    }
+//.//
+    if (master.get_digital(DIGITAL_L1)) {
+      intake2.move(-127);
+    } 
+    else if (master.get_digital(DIGITAL_L2)) {
+      intake2.move(127);
+    } 
+    else {
+      intake2.move(0);
+    }
+//.//
+    if (master.get_digital(DIGITAL_R2)) {
+      intake.move(-127);
+    } 
+    else if (master.get_digital(DIGITAL_R1)) {
+      intake.move(127);
+    } 
+    else {
+      intake.move(0);
+    }    
+//.//
+  if (master.get_digital_new_press(DIGITAL_Y)) {
+    scrapper.set(!scrapper.get());
+  } 
+//.//
+  if (master.get_digital_new_press(DIGITAL_LEFT)) {
+    hook.set(!hook.get());
+  } 
 
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
-  chassis.pid_wait();
+
+    // if (master.get_digital(DIGITAL_X)) {
+    // //lower
+    //   intake.move(-127);
+    //   intake2.move(127);
+    //   outtake.move(127);
+    // } else {
+    //   intake.move(0);
+    //   outtake.move(0);
+    //   intake2.move(0);
+    // }   
+    // if (master.get_digital(DIGITAL_A)) {
+    // //high
+    //   intake.move(127);
+    //   intake2.move(-127);
+    //   outtake.move(-127);
+    // } else {
+    //   intake.move(0);
+    //   outtake.move(0);
+    //   intake2.move(0);
+    // }   
+    // if (master.get_digital(DIGITAL_Y)) {
+    // //middle
+    //   intake.move(127);
+    //   intake2.move(-127);
+    //   outtake.move(127);
+    // } else {
+    //   intake.move(0);
+    //   outtake.move(0);
+    //   intake2.move(0);
+    // }   
+
+    pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
+  }
 }
