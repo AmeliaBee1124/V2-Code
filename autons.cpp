@@ -53,7 +53,7 @@ void default_constants() {
 ///
 void Main_Skills() {
 
-   chassis.drive_angle_set(3_deg);
+  chassis.drive_angle_set(3_deg);
   scrapper.set(false);
   hook.set(false);
   
@@ -115,7 +115,7 @@ void Main_Skills() {
   pros::delay(3500);
   intake2.move(0);
 
-  chassis.pid_turn_set(93_deg, TURN_SPEED);
+  chassis.pid_turn_set(96_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(25_in, 50, true);
@@ -123,7 +123,7 @@ void Main_Skills() {
 
   pros::delay(3500);
 
-  chassis.pid_turn_set(95_deg, TURN_SPEED);
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(-24_in, 50, true);
