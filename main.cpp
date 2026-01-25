@@ -77,7 +77,7 @@ void initialize() {
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
       {"Third Robot skills\n\ngood stuff 🍩🕳️ 67676767676767676767676767766767677676767676 teeheehee athena is the best coder and drive coach in the world :)))", Main_Skills},
-      {"Blue Right\n\nThis says blue right but its actually new left side third robot Songhao drive. I'm to lazy to make a new program", blue_right},
+      {"Blue Right\n\nThis says blue right but its actually new left side third robot Songhao drive. I'm to lazy to make a new program FRESH MEATT 🥩", blue_right},
       {"Red left S\n\nTwo blocks in Two goals", red_left_S},
       {"Red left C\n\nTwo blocks in Two goals", red_left_C},
      // {"Backup Skills\n\ngood stuff", Backup_Skills},
