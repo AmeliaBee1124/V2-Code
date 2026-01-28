@@ -272,6 +272,26 @@ void opcontrol() {
 
 
 //.//
+    if (master.get_digital(DIGITAL_R1)) {
+      intake.move(-127);
+    } 
+    else if (master.get_digital(DIGITAL_R2)) {
+      intake.move(127);
+    } 
+    else {
+      intake.move(0);
+    }    
+//.//
+    // if (master.get_digital(DIGITAL_Y)) {
+    //   intake.move(-127);
+    // } 
+    // else if (master.get_digital(DIGITAL_A)) {
+    //   intake.move(127);
+    // } 
+    // else {
+    //   intake.move(0);
+    // }    
+//.//
     if (master.get_digital(DIGITAL_L2)) {
       intake2.move(-127);
     } 
@@ -282,14 +302,13 @@ void opcontrol() {
       intake2.move(0);
     }
 //.//
-    if (master.get_digital(DIGITAL_R1)) {
-      intake.move(-127);
+    if (master.get_digital(DIGITAL_X)) {
+      intake2.move(-60);
     } 
-    else if (master.get_digital(DIGITAL_R2)) {
-      intake.move(127);
+    else if (master.get_digital(DIGITAL_B)) {
+      intake2.move(60);
     } 
     else {
-      intake.move(0);
     }    
 //.//
   if (master.get_digital_new_press(DIGITAL_Y)) {
@@ -338,4 +357,3 @@ void opcontrol() {
     pros::delay(ez::util::DELAY_TIME);  // This is used for timer calculations!  Keep this ez::util::DELAY_TIME
   }
 }
-
