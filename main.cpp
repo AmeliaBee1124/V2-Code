@@ -13,12 +13,13 @@ ez::Drive chassis(
 
     // {-7,9,-12},     // Left Chassis Ports (negative port will reverse it!)Songhao 3rd
     // {-20,10,8},  // Right Chassis Ports (negative port will reverse it!) 
-
-    {20,-10,-8},     // Left Chassis Ports (negative port will reverse it!)Songhao 3rd
+    //V3
+    {20,-10,-8},     // Left Chassis Ports (negative port will reverse it!)real Songhao 3rd
     {7,-9,12},  // Right Chassis Ports (negative port will reverse it!) 
+    //V4
 
-    // {-14,-13,-11},     // Left Chassis Ports (negative port will reverse it!)Carl
-    // {15,16,12},  // Right Chassis Ports (negative port will reverse it!)
+    // {-18,-19,20},  // Right Chassis Ports (negative port will reverse it!)
+    // {-12,13,11},     // Left Chassis Ports (negative port will reverse it!)Carl
 
     18,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
@@ -47,7 +48,7 @@ void initialize() {
 
   hook.set(true);
   scrapper.set(false);
-  middle.set(true);
+  middle.set(false);
   // chassis.drive_angle_set(180_deg);
   
 
@@ -73,16 +74,14 @@ void initialize() {
   // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
   //chassis.opcontrol_curve_buttons_left_set(pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT);  // If using tank, only the left side is used.
   // chassis.opcontrol_curve_buttons_right_set(pros::E_CONTROLLER_DIGITAL_Y, pros::E_CONTROLLER_DIGITAL_A);
-
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Third Robot skills\n\ngood stuff 🍩🕳️ 67676767676767676767676767766767677676767676 teeheehee athena is the best coder and drive coach in the world :)))", Main_Skills},
-      {"Blue Right\n\nThis says blue right but its actually new left side third robot Songhao drive. I'm to lazy to make a new program FRESH MEATT 🥩", blue_right},
-      {"Red left S\n\nTwo blocks in Two goals", red_left_S},
-      {"Red left C\n\nTwo blocks in Two goals", red_left_C},
-     // {"Backup Skills\n\ngood stuff", Backup_Skills},
+      {"Red right S\n\nTwo blocks in Two goals", red_left_S},
+      {"15 second left\n\ngood stuff", Backup_Skills},
+      {"Third Robot skills\n\ngood stuff 🍩🕳️6767676766767teeheehee athena is the best coder and drive coach in the world :))) and i owe her boba for lifeeeeeeeeeeeeeeeeeeeeeee", Main_Skills}, 
+      {"Blue Right\n\nThis says blue right but its actually new left side third robot Songhao drive. I'm to lazy to make a new program", blue_right},
       //{"Red Right S\n\nTwo blocks in Two goals", red_right_S},
-      {"Red Right C\n\nTwo blocks in Two goals", red_right_C},
+      {"Red left C\n\nTwo blocks in Two goals", red_left_C},
       {"Blue Left\n\nDo nothaing", blue_left},
       // {"Reg skills\n\ncool stuff", Reg_skills},
   });
@@ -270,28 +269,7 @@ void opcontrol() {
     // Put more user control code here!
     // . . .
 
-    if (master.get_digital(DIGITAL_L1)) {
-      outtake.move(-127);
-      intake2.move(127);
-    } 
-    else if (master.get_digital(DIGITAL_L2)) {
-      outtake.move(127);
-      intake2.move(-127);
-    } 
-    else {
-      outtake.move(0);
-      intake2.move(0);
-    }
-//.//
-    if (master.get_digital(DIGITAL_L1)) {
-      intake2.move(-127);
-    } 
-    else if (master.get_digital(DIGITAL_L2)) {
-      intake2.move(127);
-    } 
-    else {
-      intake2.move(0);
-    }
+
 //.//
     if (master.get_digital(DIGITAL_R2)) {
       intake.move(-127);
@@ -301,6 +279,35 @@ void opcontrol() {
     } 
     else {
       intake.move(0);
+    }    
+//.//
+    // if (master.get_digital(DIGITAL_Y)) {
+    //   intake.move(-127);
+    // } 
+    // else if (master.get_digital(DIGITAL_A)) {
+    //   intake.move(127);
+    // } 
+    // else {
+    //   intake.move(0);
+    // }    
+//.//
+    if (master.get_digital(DIGITAL_L2)) {
+      intake2.move(-127);
+    } 
+    else if (master.get_digital(DIGITAL_L1)) {
+      intake2.move(127);
+    } 
+    else {
+      intake2.move(0);
+    }
+//.//
+    if (master.get_digital(DIGITAL_X)) {
+      intake2.move(-60);
+    } 
+    else if (master.get_digital(DIGITAL_B)) {
+      intake2.move(60);
+    } 
+    else {
     }    
 //.//
   if (master.get_digital_new_press(DIGITAL_Y)) {
@@ -316,7 +323,7 @@ void opcontrol() {
 
 
     // if (master.get_digital(DIGITAL_X)) {
-    // //lower
+    //  //lower
     //   intake.move(-127);
     //   intake2.move(127);
     //   outtake.move(127);
