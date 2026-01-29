@@ -76,10 +76,10 @@ void initialize() {
   // chassis.opcontrol_curve_buttons_right_set(pros::E_CONTROLLER_DIGITAL_Y, pros::E_CONTROLLER_DIGITAL_A);
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
+      {"Blue Right\n\nThis says blue right but its actually new left side third robot Songhao drive. I'm to lazy to make a new program", blue_right},
+      {"Third Robot skills\n\ngood stuff 🍩🕳️6767676766767teeheehee athena is the best coder and drive coach in the world :))) and i owe her boba for lifeeeeeeeeeeeeeeeeeeeeeee", Main_Skills}, 
       {"Red right S\n\nTwo blocks in Two goals", red_left_S},
       {"15 second left\n\ngood stuff", Backup_Skills},
-      {"Third Robot skills\n\ngood stuff 🍩🕳️6767676766767teeheehee athena is the best coder and drive coach in the world :))) and i owe her boba for lifeeeeeeeeeeeeeeeeeeeeeee", Main_Skills}, 
-      {"Blue Right\n\nThis says blue right but its actually new left side third robot Songhao drive. I'm to lazy to make a new program", blue_right},
       //{"Red Right S\n\nTwo blocks in Two goals", red_right_S},
       {"Red left C\n\nTwo blocks in Two goals", red_left_C},
       {"Blue Left\n\nDo nothaing", blue_left},
@@ -291,10 +291,10 @@ void opcontrol() {
     //   intake.move(0);
     // }    
 //.//
-    if (master.get_digital(DIGITAL_L2)) {
+    if (master.get_digital(DIGITAL_L1)) {
       intake2.move(-127);
     } 
-    else if (master.get_digital(DIGITAL_L1)) {
+    else if (master.get_digital(DIGITAL_L2)) {
       intake2.move(127);
     } 
     else {
