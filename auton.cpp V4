@@ -48,7 +48,6 @@ void default_constants() {
   chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
 }
 
-
 // Red Right
 ///
 void Main_Skills() {
@@ -501,12 +500,12 @@ void red_right_C() {
 ///
 ///
 void Backup_Skills() {
-
+  hook.set(false);
   intake.move(127);
 
   chassis.drive_angle_set(0_deg);
 
-  scrapper.set(true);
+  scrapper.set(false);
   
   chassis.drive_angle_set(150_deg);
 
@@ -519,7 +518,7 @@ void Backup_Skills() {
   chassis.pid_turn_set(47_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  middle.set(false);
+  middle.set(true);
 
   chassis.pid_drive_set(27.5_in, 70, true);
   chassis.pid_wait();
@@ -527,7 +526,7 @@ void Backup_Skills() {
   //chassis.pid_drive_set(43_in, 70, true);
   //chassis.pid_wait();
 
-  scrapper.set(false);
+  scrapper.set(true);
 
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
@@ -544,7 +543,7 @@ void Backup_Skills() {
   chassis.pid_drive_set(-10_in, 70, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(-4_deg, TURN_SPEED);
+  chassis.pid_turn_set(-8_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(-17_in, 70, true);
@@ -564,10 +563,24 @@ void Backup_Skills() {
 
   intake2.move(127);
 
-  pros::delay(5000);
+  pros::delay(1000);
 
-  // chassis.pid_drive_set(10_in, 70, true);
-  // chassis.pid_wait()/
+  chassis.pid_drive_set(15_in, 70, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(-45_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-16.5_in, 70, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  hook.set(true); 
+
+  chassis.pid_drive_set(-17_in, 70, true);
+  chassis.pid_wait();
 
   // chassis.pid_drive_set(-15_in, 70, true);
   // chassis.pid_wait();
