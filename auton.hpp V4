@@ -9,6 +9,4 @@ void red_left_C();
 void blue_right();
 void blue_left();
 void Main_Skills();
-void Backup_Skills();
 void Backup_Skills_Right();
-
