@@ -19,6 +19,6 @@ inline pros::Motor intake2(4);
 //inline ez::Piston middle('C');
 
 inline ez::Piston scrapper('H');
-inline ez::Piston middle('B');
+inline ez::Piston middle('D');
 inline ez::Piston hook('A');
 inline pros::Distance distancesensor(13);
