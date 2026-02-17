@@ -69,7 +69,7 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Backup 15 second\n\ngood stuff", Backup_Skills},
+      {"Backup 15 second\n\ngood stuff", Backup_Skills_Right},
       {"Third Robot skills\n\ngood stuff and i (amelia) owe athena boba for lifeeeeeeeeeeeeeeeeeeeeeee", Main_Skills}, 
       {"Red Right C\n\nTwo blocks in Two goals", red_right_C},
       {"Blue Right\n\nThis says blue right but its actually new left side third robot Songhao drive. I'm to lazy to make a new program", blue_right},
@@ -296,23 +296,23 @@ void opcontrol() {
       intake2.move(0);
     }
 //.//
-    if (master.get_digital(DIGITAL_X)) {
-      intake2.move(-60);
-    } 
-    else if (master.get_digital(DIGITAL_B)) {
-      intake2.move(60);
-    } 
-    else {
-    }    
+    // if (master.get_digital(DIGITAL_X)) {
+    //   intake2.move(-60);
+    // } 
+    // else if (master.get_digital(DIGITAL_B)) {
+    //   intake2.move(60);
+    // } 
+    // else {
+    // }    
 //.//
   if (master.get_digital_new_press(DIGITAL_DOWN)) {
     scrapper.set(!scrapper.get());
   } 
 //.//
-  if (master.get_digital_new_press(DIGITAL_LEFT)) {
+  if (master.get_digital_new_press(DIGITAL_A)) {
     hook.set(!hook.get());
   }
-  if (master.get_digital_new_press(DIGITAL_Y)) {
+  if (master.get_digital_new_press(DIGITAL_LEFT)) {
     middle.set(!middle.get());
   } 
 
