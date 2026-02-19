@@ -51,52 +51,49 @@ void default_constants() {
 // Red Right
 ///
 void Main_Skills() {
+    //Start on right
   chassis.drive_angle_set(0_deg);
-  scrapper.set(false);
-  hook.set(false);
+  scrapper.set(true);
+  hook.set(true);
   middle.set(true);
   
   chassis.pid_drive_set(30_in, DRIVE_SPEED, true); 
-   
   chassis.pid_wait();
 
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  scrapper.set(true);
   intake.move(127);
-  
-  pros::delay(500);
 
   chassis.pid_drive_set(17_in, 50, true);
   chassis.pid_wait();
 
-  pros::delay(2500); //Eat first loader of Donut holes
+  pros::delay(1500); //Eat first loader of Donut holes
 
   chassis.pid_drive_set(-14_in, 50, true);
   chassis.pid_wait();
 
   scrapper.set(false); 
 
-  chassis.pid_turn_set(45_deg, TURN_SPEED);
+  chassis.pid_turn_set(-45_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(14_in, 50, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(50_in, 50, true);
+  chassis.pid_drive_set(50_in, 50, true); //Gets too second corner
   chassis.pid_wait();
 
-  chassis.pid_turn_set(135_deg, TURN_SPEED);
+  chassis.pid_turn_set(-135_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(14_in, 50, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(-15_in, 50, true);
@@ -108,27 +105,27 @@ void Main_Skills() {
   pros::delay(1000);
   intake.move(-127); 
   intake2.move(-127);
-  pros::delay(200);
+  pros::delay(100);
   intake.move(127); 
   intake2.move(127);
-  pros::delay(2000);
+  pros::delay(1500);
   intake2.move(0);
 
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(10_in, 50, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(15_in, 50, true);
   chassis.pid_wait();
 
-  pros::delay(2500);
+  pros::delay(1500);
 
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(-24_in, 50, true);
@@ -139,14 +136,14 @@ void Main_Skills() {
   pros::delay(1000);
   intake.move(-127); 
   intake2.move(-127);
-  pros::delay(200);
+  pros::delay(100);
   intake.move(127); 
   intake2.move(127);
-  pros::delay(2000);
+  pros::delay(1500);
   intake2.move(0);
   scrapper.set(false);
 
-//park
+//corner 3
 
   chassis.pid_drive_set(10_in, 50, true);
   chassis.pid_wait();
@@ -157,73 +154,487 @@ void Main_Skills() {
   chassis.pid_drive_set(-100_in, 50, true);
   chassis.pid_wait();
 
-  scrapper.set(true);
-
-
-  chassis.pid_drive_set(13_in, 50, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(90_deg, 50);
-  chassis.pid_wait();
-
-  chassis.pid_drive_set(18_in, 50, true);
-  chassis.pid_wait();
-
-  pros::delay(3500);
-
-  chassis.pid_drive_set(-24_in, 50, true);
-  chassis.pid_wait();
-
-  intake2.move(127);
-
-  scrapper.set(false);
-
-  pros::delay(1000);
-
-  intake.move(-127); 
-  intake2.move(-127);
-
-  pros::delay(200);
-
-  intake.move(127); 
-  intake2.move(127);
-
-  pros::delay(2000);
-
-  chassis.pid_drive_set(10_in, 50, true);
-  chassis.pid_wait();
-
-  chassis.pid_turn_set(0_deg, 50);
-  chassis.pid_wait();
-
   chassis.pid_drive_set(15_in, 50, true);
   chassis.pid_wait();
+
+  scrapper.set(true);
 
   chassis.pid_turn_set(-90_deg, 50);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(90_in, DRIVE_SPEED, true);
+  chassis.pid_drive_set(20_in, 50, true);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(-10_in, DRIVE_SPEED, true);
+  pros::delay(1500);//Eat third loader
+
+  chassis.pid_drive_set(-14_in, 50, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(90_deg, 50);
+  scrapper.set(false); 
+
+  chassis.pid_turn_set(-225_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_swing_set(ez::RIGHT_SWING, 172, 90);
+  chassis.pid_drive_set(14_in, 50, true);
   chassis.pid_wait();
 
-  // chassis.pid_turn_set(-8_deg, 50);
-  // chassis.pid_wait();
+  chassis.pid_turn_set(95_deg, TURN_SPEED);
+  chassis.pid_wait();
 
+  chassis.pid_drive_set(50_in, 50, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(-315_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(14.5_in, 50, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-15_in, 50, true);
+  chassis.pid_wait();
+
+  intake.move(127); 
+  intake2.move(127); //Throws up third loader of donut holes
+  scrapper.set(true);
+  pros::delay(1000);
+  intake.move(-127); 
+  intake2.move(-127);
+  pros::delay(100);
+  intake.move(127); 
+  intake2.move(127);
+  pros::delay(1500);
   intake2.move(0);
 
-  chassis.drive_set(-127,-127);
+  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(27_in, 50, true);
+  chassis.pid_wait();
+
+  pros::delay(2500);
+
+  chassis.pid_drive_set(-24_in, 50, true);
+  chassis.pid_wait();
+
+  intake.move(127); 
+  intake2.move(127);
+  pros::delay(1000);
+  intake.move(-127); 
+  intake2.move(-127);
+  pros::delay(100);
+  intake.move(127); 
+  intake2.move(127);
+  pros::delay(1500);
+  scrapper.set(false);
+//park IF NO FIELD MONITOR
+
+  chassis.pid_drive_set(17_in, 50, true);
+  chassis.pid_wait();
+
+  chassis.pid_swing_set(ez::RIGHT_SWING, 2, 90, 25);
+  chassis.pid_wait();
+
+  chassis.drive_set(100,100);
 
   pros::delay(1000);
 
   chassis.drive_set(0,0);
+
+//-------------------------------------------------------------------------------------------------------//
+
+ // start on left (end not tuned))
+
+//   chassis.drive_angle_set(0_deg);
+//   scrapper.set(false);
+//   hook.set(false);
+  
+//   chassis.pid_drive_set(30_in, DRIVE_SPEED, true); 
+   
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(-90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   scrapper.set(false);
+//   intake.move(127);
+  
+//   pros::delay(500);
+
+//   chassis.pid_drive_set(17_in, 50, true);
+//   chassis.pid_wait();
+
+//   pros::delay(2500); //Eat first loader of Donut holes
+
+//   chassis.pid_drive_set(-14_in, 50, true);
+//   chassis.pid_wait();
+
+//   scrapper.set(true); 
+
+//   chassis.pid_turn_set(45_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(14_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(50_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(135_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(14_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(-15_in, 50, true);
+//   chassis.pid_wait();
+
+//   intake.move(127); 
+//   intake2.move(127); //Throws up first loader of donut holes
+//   scrapper.set(false);
+//   pros::delay(1000);
+//   intake.move(-127); 
+//   intake2.move(-127);
+//   pros::delay(200);
+//   intake.move(127); 
+//   intake2.move(127);
+//   pros::delay(2000);
+//   intake2.move(0);
+
+//   chassis.pid_turn_set(90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(10_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(15_in, 50, true);
+//   chassis.pid_wait();
+
+//   pros::delay(2500);
+
+//   chassis.pid_turn_set(90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(-24_in, 50, true);
+//   chassis.pid_wait();
+
+//   intake.move(127); 
+//   intake2.move(127);
+//   pros::delay(1000);
+//   intake.move(-127); 
+//   intake2.move(-127);
+//   pros::delay(200);
+//   intake.move(127); 
+//   intake2.move(127);
+//   pros::delay(2000);
+//   intake2.move(0);
+//   scrapper.set(true);
+
+// //corner 3
+
+//   chassis.pid_drive_set(10_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(0_deg, 50);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(-100_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(15_in, 50, true);
+//   chassis.pid_wait();
+
+//   scrapper.set(false);
+
+//   chassis.pid_turn_set(90_deg, 50);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(18_in, 50, true);
+//   chassis.pid_wait();
+
+//   pros::delay(2000);//Eat third loader
+
+//   chassis.pid_drive_set(-14_in, 50, true);
+//   chassis.pid_wait();
+
+//   scrapper.set(true); 
+
+//   chassis.pid_turn_set(225_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(14_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(-90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(50_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(315_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(12_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(-90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(-15_in, 50, true);
+//   chassis.pid_wait();
+
+//   intake.move(127); 
+//   intake2.move(127); //Throws up third loader of donut holes
+//   scrapper.set(false);
+//   pros::delay(1000);
+//   intake.move(-127); 
+//   intake2.move(-127);
+//   pros::delay(200);
+//   intake.move(127); 
+//   intake2.move(127);
+//   pros::delay(2000);
+//   intake2.move(0);
+
+//   chassis.pid_turn_set(-90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(27_in, 50, true);
+//   chassis.pid_wait();
+
+//   pros::delay(2500);
+
+//   chassis.pid_drive_set(-24_in, 50, true);
+//   chassis.pid_wait();
+
+//   intake.move(127); 
+//   intake2.move(127);
+//   pros::delay(1000);
+//   intake.move(-127); 
+//   intake2.move(-127);
+//   pros::delay(200);
+//   intake.move(127); 
+//   intake2.move(127);
+//   pros::delay(2000);
+//   intake2.move(0);
+//   scrapper.set(true);
+// //park IF NO FIELD MONITOR
+
+//   chassis.pid_swing_set(ez::LEFT_SWING, 175, 90, 40);
+//   chassis.pid_wait();
+
+
+//   intake2.move(0);
+
+//   chassis.drive_set(127,127);
+
+//   pros::delay(1000);
+
+//   chassis.drive_set(0,0);
+// //park IF THERE IS A FIELD MONITOR
+
+//   chassis.pid_turn_set(90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(10_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_swing_set(ez::RIGHT_SWING, -5, 90, 40);
+//   chassis.pid_wait();
+
+//   intake2.move(0);
+
+//   chassis.drive_set(-127,-127);
+
+//   pros::delay(1000);
+
+//   chassis.drive_set(0,0);
+
+  //----------------------------------------------------------------//
+
+//   chassis.drive_angle_set(0_deg);
+//   scrapper.set(false);
+//   hook.set(false);
+//   middle.set(true);
+  
+//   chassis.pid_drive_set(30_in, DRIVE_SPEED, true); 
+   
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(-90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   scrapper.set(true);
+//   intake.move(127);
+  
+//   pros::delay(500);
+
+//   chassis.pid_drive_set(17_in, 50, true);
+//   chassis.pid_wait();
+
+//   pros::delay(2500); //Eat first loader of Donut holes
+
+//   chassis.pid_drive_set(-14_in, 50, true);
+//   chassis.pid_wait();
+
+//   scrapper.set(false); 
+
+//   chassis.pid_turn_set(45_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(14_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(50_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(135_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(14_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(-15_in, 50, true);
+//   chassis.pid_wait();
+
+//   intake.move(127); 
+//   intake2.move(127); //Throws up first loader of donut holes
+//   scrapper.set(true);
+//   pros::delay(1000);
+//   intake.move(-127); 
+//   intake2.move(-127);
+//   pros::delay(200);
+//   intake.move(127); 
+//   intake2.move(127);
+//   pros::delay(2000);
+//   intake2.move(0);
+
+//   chassis.pid_turn_set(90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(10_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(15_in, 50, true);
+//   chassis.pid_wait();
+
+//   pros::delay(2500);
+
+//   chassis.pid_turn_set(90_deg, TURN_SPEED);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(-24_in, 50, true);
+//   chassis.pid_wait();
+
+//   intake.move(127); 
+//   intake2.move(127);
+//   pros::delay(1000);
+//   intake.move(-127); 
+//   intake2.move(-127);
+//   pros::delay(200);
+//   intake.move(127); 
+//   intake2.move(127);
+//   pros::delay(2000);
+//   intake2.move(0);
+//   scrapper.set(false);
+
+// //park
+
+//   chassis.pid_drive_set(10_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(0_deg, 50);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(-100_in, 50, true);
+//   chassis.pid_wait();
+
+//   scrapper.set(true);
+
+
+//   chassis.pid_drive_set(13_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(90_deg, 50);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(18_in, 50, true);
+//   chassis.pid_wait();
+
+//   pros::delay(3500);
+
+//   chassis.pid_drive_set(-24_in, 50, true);
+//   chassis.pid_wait();
+
+//   intake2.move(127);
+
+//   scrapper.set(false);
+
+//   pros::delay(1000);
+
+//   intake.move(-127); 
+//   intake2.move(-127);
+
+//   pros::delay(200);
+
+//   intake.move(127); 
+//   intake2.move(127);
+
+//   pros::delay(2000);
+
+//   chassis.pid_drive_set(10_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(0_deg, 50);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(15_in, 50, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(-90_deg, 50);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(90_in, DRIVE_SPEED, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_drive_set(-10_in, DRIVE_SPEED, true);
+//   chassis.pid_wait();
+
+//   chassis.pid_turn_set(90_deg, 50);
+//   chassis.pid_wait();
+
+//   chassis.pid_swing_set(ez::RIGHT_SWING, 172, 90);
+//   chassis.pid_wait();
+
+//   // chassis.pid_turn_set(-8_deg, 50);
+//   // chassis.pid_wait();
+
+//   intake2.move(0);
+
+//   chassis.drive_set(-127,-127);
+
+//   pros::delay(1000);
+
+//   chassis.drive_set(0,0);
 
 //2 corner
 //   chassis.drive_angle_set(3_deg);
@@ -769,18 +1180,16 @@ chassis.drive_angle_set(0_deg);
 
   pros::delay(2000);
 
-  intake.move(-127);
-
   //intake2.move(0);
 
   //middle.set(false);
 
-  chassis.pid_drive_set(-40_in, 70, true);
+  chassis.pid_drive_set(-42_in, 70, true);
   chassis.pid_wait();
 
   scrapper.set(true);
 
-  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_turn_set(-30_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(12_in, 55, true);
