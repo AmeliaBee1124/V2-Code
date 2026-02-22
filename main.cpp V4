@@ -31,8 +31,11 @@ ez::Drive chassis(
 //  - you should get positive values on the encoders going FORWARD and RIGHT
 // - `2.75` is the wheel diameter
 // - `4.0` is the distance from the center of the wheel to the center of the robot
-// ez::tracking_wheel horiz_tracker(8, 2.75, 4.0);  // This tracking wheel is perpendicular to the drive wheels
-// ez::tracking_wheel vert_tracker(9, 2.75, 4.0);   // This tracking wheel is parallel to the drive wheels
+
+
+
+    // ez::tracking_wheel horiz_tracker(8, 2, 2.5);  // This tracking wheel is perpendicular to the drive wheels
+    // ez::tracking_wheel vert_tracker(9, 2, 3.75);   // This tracking wheel is parallel to the drive wheels
 );
 /**
  * Runs initialization code. This occurs as soon as the program is started.
@@ -45,7 +48,7 @@ void initialize() {
   ez::ez_template_print();
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
-
+  middle.set(true);
   // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
   //  - change `back` to `front` if the tracking wheel is in front of the midline
   //  - ignore this if you aren't using a horizontal tracker
@@ -69,8 +72,8 @@ void initialize() {
 
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Backup 15 second\n\nLEFT 7 BLOCK PUSH", Backup_Skills_Right},
       {"Third Robot skills\n\ngood stuff and i (amelia) owe athena boba for lifeeeeeeeeeeeeeeeeeeeeeee", Main_Skills}, 
+      {"Backup 15 second\n\nLEFT 7 BLOCK PUSH", Backup_Skills_Right},
       //{"Red Right C\n\nTwo blocks in Two goals", red_right_C},
       {"Blue Right\n\nLEFT 4+3", blue_right},
       //{"Red Right S\n\nTwo blocks in Two goals", red_right_S},
@@ -275,6 +278,7 @@ void opcontrol() {
     else {
       intake.move(0);
     }    
+
 //.//
     // if (master.get_digital(DIGITAL_Y)) {
     //   intake.move(-127);
@@ -292,9 +296,17 @@ void opcontrol() {
     else if (master.get_digital(DIGITAL_L1)) {
       intake2.move(127);
     } 
+    else if (master.get_digital(DIGITAL_B)) {
+      intake2.move(50);
+    } 
+    else if (master.get_digital(DIGITAL_X)) {
+      intake2.move(35);
+    } 
     else {
       intake2.move(0);
-    }
+    }    
+    
+    
 //.//
     // if (master.get_digital(DIGITAL_X)) {
     //   intake2.move(-60);
@@ -309,7 +321,7 @@ void opcontrol() {
     scrapper.set(!scrapper.get());
   } 
 //.//
-  if (master.get_digital_new_press(DIGITAL_A)) {
+  if (master.get_digital_new_press(DIGITAL_Y)) {
     hook.set(!hook.get());
   }
   if (master.get_digital_new_press(DIGITAL_LEFT)) {
