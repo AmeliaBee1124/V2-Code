@@ -111,13 +111,14 @@ void Main_Skills() {
   pros::delay(1500);
   intake2.move(0);
 
+
   chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(10_in, 50, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(-90_deg, TURN_SPEED);
+  chassis.pid_turn_set(-94_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(15_in, 50, true);
@@ -131,14 +132,14 @@ void Main_Skills() {
   chassis.pid_drive_set(-24_in, 50, true);
   chassis.pid_wait();
 
-  intake.move(127); 
+  intake.move(127); //throws up second loader
   intake2.move(127);
   pros::delay(1000);
   intake.move(-127); 
   intake2.move(-127);
   pros::delay(100);
-  intake.move(127); 
-  intake2.move(127);
+  intake.move(90); 
+  intake2.move(90);
   pros::delay(1500);
   intake2.move(0);
   scrapper.set(false);
@@ -151,17 +152,22 @@ void Main_Skills() {
   chassis.pid_turn_set(0_deg, 50);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(-100_in, 50, true);
+  //Drive to the other side of the field into the wall to fix any misalignment and hard reset X position
+  chassis.pid_drive_set(-100_in, 50, true); 
   chassis.pid_wait();
 
-  chassis.pid_drive_set(15_in, 50, true);
+  //Go back to align to loader
+  chassis.pid_drive_set(13_in, 50, true);
   chassis.pid_wait();
 
+  //Put loader down early
   scrapper.set(true);
 
+  //Turn to face Loader
   chassis.pid_turn_set(-90_deg, 50);
   chassis.pid_wait();
 
+  //Go into loader and hard reset in y direction
   chassis.pid_drive_set(20_in, 50, true);
   chassis.pid_wait();
 
@@ -231,7 +237,7 @@ void Main_Skills() {
   scrapper.set(false);
 //park IF NO FIELD MONITOR
 
-  chassis.pid_drive_set(17_in, 50, true);
+  chassis.pid_drive_set(15_in, 50, true);
   chassis.pid_wait();
 
   chassis.pid_swing_set(ez::RIGHT_SWING, 2, 90, 25);
@@ -239,7 +245,7 @@ void Main_Skills() {
 
   chassis.drive_set(100,100);
 
-  pros::delay(1000);
+  pros::delay(1100);
 
   chassis.drive_set(0,0);
 
@@ -1046,11 +1052,10 @@ void Backup_Skills_Right() {
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
  
-
   chassis.pid_drive_set(-11_in, 70, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(-12_deg, TURN_SPEED);
+  chassis.pid_turn_set(-3_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(-17_in, 70, true);
@@ -1064,13 +1069,17 @@ void Backup_Skills_Right() {
 
   intake2.move(-127);
 
-  pros::delay(200);
+  pros::delay(100);
 
   intake.move(127);
 
   intake2.move(127);
 
-  pros::delay(1000);
+  pros::delay(2000);
+
+  intake.move(0);
+
+  intake2.move(0);
 
   chassis.pid_drive_set(15_in, 70, true);
   chassis.pid_wait();
@@ -1079,14 +1088,14 @@ void Backup_Skills_Right() {
   chassis.pid_wait();
 
   chassis.pid_drive_set(-16.5_in, 70, true);
-  chassis.pid_wait();
+  chassis.pid_wait(); 
 
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
 
   hook.set(false); 
 
-  chassis.pid_drive_set(-17_in, 70, true);
+  chassis.pid_drive_set(-20_in, 70, true);
   chassis.pid_wait();
 
   // chassis.pid_drive_set(-15_in, 70, true);
@@ -1250,7 +1259,6 @@ void red_left_S() {
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
 
-
   chassis.pid_drive_set(-18.5_in, 70, true);
   chassis.pid_wait();
 
@@ -1267,12 +1275,31 @@ void red_left_S() {
   intake.move(-127);
   intake2.move(-127);
 
-  pros::delay(400);
+  pros::delay(100);
 
-  intake.move(127);
-  intake2.move(127);
+  pros::delay(2000);
 
-  pros::delay(5000);
+  intake.move(0);
+  intake2.move(0);
+
+  scrapper.set(false);
+
+  chassis.pid_drive_set(15_in, 70, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(-45_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  chassis.pid_drive_set(-8_in, 70, true);
+  chassis.pid_wait();
+
+  chassis.pid_turn_set(0_deg, TURN_SPEED);
+  chassis.pid_wait();
+
+  hook.set(false); 
+
+  chassis.pid_drive_set(-17_in, 70, true);
+  chassis.pid_wait();
 }
 
 ///
@@ -1283,35 +1310,39 @@ void blue_right() {
   chassis.drive_angle_set(0_deg);
 
   scrapper.set(false);
+
+  middle.set(true);
   
   chassis.drive_angle_set(150_deg);
 
   //Starts Motors
-  intake.move(-127);
+  intake.move(127);
 
   chassis.pid_drive_set(30_in, 70, true);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(-6_in, 70, true);
+  chassis.pid_drive_set(-4_in, 70, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(47_deg, TURN_SPEED);
+  chassis.pid_turn_set(49_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  middle.set(true);
+  middle.set(false);
 
   chassis.pid_drive_set(-14_in, 70, true);
   chassis.pid_wait();
 
-  intake2.move(-127);
+  intake.move(5+0);
+
+  intake2.move(127);
 
   pros::delay(2000);
 
   intake2.move(0);
 
-  middle.set(false);
+  middle.set(true);
 
-  chassis.pid_drive_set(42_in, 70, true);
+  chassis.pid_drive_set(40.5_in, 70, true);
   chassis.pid_wait();
 
   scrapper.set(true);
@@ -1319,10 +1350,10 @@ void blue_right() {
   chassis.pid_turn_set(0_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(12_in, 55, true);
+  chassis.pid_drive_set(14_in, 55, true);
   chassis.pid_wait();
 
-  pros::delay(600);
+  pros::delay(200);
 
   chassis.pid_drive_set(-10_in, 70, true);
   chassis.pid_wait();
@@ -1333,7 +1364,7 @@ void blue_right() {
   chassis.pid_drive_set(-14_in, 70, true);
   chassis.pid_wait();
 
-  intake2.move(-127);
+  intake2.move(127);
 
   pros::delay(3000);
 
@@ -1348,7 +1379,8 @@ void blue_right() {
 // Blue Left
 ///
 void blue_left() {
-  intake2.move(-127);
+  chassis.pid_drive_set(1_in, 70, true);
+  chassis.pid_wait();
 }
 
 ///
