@@ -56,6 +56,7 @@ void Main_Skills() {
   scrapper.set(true);
   hook.set(true);
   middle.set(true);
+  intake2.move(0);
   
   chassis.pid_drive_set(30_in, DRIVE_SPEED, true); 
   chassis.pid_wait();
@@ -118,7 +119,7 @@ void Main_Skills() {
   chassis.pid_drive_set(10_in, 50, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(-94_deg, TURN_SPEED);
+  chassis.pid_turn_set(-90_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(15_in, 50, true);
@@ -240,7 +241,7 @@ void Main_Skills() {
   chassis.pid_drive_set(15_in, 50, true);
   chassis.pid_wait();
 
-  chassis.pid_swing_set(ez::RIGHT_SWING, 2, 90, 25);
+  chassis.pid_swing_set(ez::RIGHT_SWING, 3, 85, 25);
   chassis.pid_wait();
 
   chassis.drive_set(100,100);
@@ -1170,6 +1171,7 @@ chassis.drive_angle_set(0_deg);
 
   //Starts Motors
   intake.move(127);
+  intake2.move(0);
 
   chassis.pid_drive_set(30_in, 70, true);
   chassis.pid_wait();
@@ -1177,28 +1179,28 @@ chassis.drive_angle_set(0_deg);
   chassis.pid_drive_set(-6_in, 70, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(65_deg, TURN_SPEED);
+  chassis.pid_turn_set(75_deg, TURN_SPEED);
   chassis.pid_wait();
 
-  chassis.pid_drive_set(14_in, 70, true);
+  chassis.pid_drive_set(13_in, 70, true);
   chassis.pid_wait();
 
-  intake.move(-127);
+  intake.move(-100);
   intake2.move(-127);
 
 
-  pros::delay(2000);
+  pros::delay(1500);
 
-  //intake2.move(0);
+  intake.move(127);
 
   //middle.set(false);
 
-  chassis.pid_drive_set(-42_in, 70, true);
+  chassis.pid_drive_set(-43_in, 70, true);
   chassis.pid_wait();
 
   scrapper.set(true);
 
-  chassis.pid_turn_set(-30_deg, TURN_SPEED);
+  chassis.pid_turn_set(-58_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(12_in, 55, true);
@@ -1209,7 +1211,7 @@ chassis.drive_angle_set(0_deg);
   chassis.pid_drive_set(-10_in, 70, true);
   chassis.pid_wait();
 
-  chassis.pid_turn_set(-2_deg, TURN_SPEED);
+  chassis.pid_turn_set(-58_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(-14_in, 70, true);
@@ -1217,7 +1219,7 @@ chassis.drive_angle_set(0_deg);
 
   intake2.move(-127);
 
-  pros::delay(3000);
+  pros::delay(5000);
 
 }
 
@@ -1332,7 +1334,7 @@ void blue_right() {
   chassis.pid_drive_set(-14_in, 70, true);
   chassis.pid_wait();
 
-  intake.move(5+0);
+  intake.move(50);
 
   intake2.move(127);
 
