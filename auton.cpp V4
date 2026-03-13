@@ -210,7 +210,7 @@ void Main_Skills() {
   pros::delay(1700);
   intake2.move(0);
 
-  chassis.pid_turn_set(90_deg, TURN_SPEED);
+  chassis.pid_turn_set(87_deg, TURN_SPEED);
   chassis.pid_wait();
 
   chassis.pid_drive_set(27_in, 50, true);
@@ -233,7 +233,7 @@ void Main_Skills() {
   scrapper.set(false);
 //park IF NO FIELD MONITOR
 
-  chassis.pid_drive_set(12_in, 50, true);
+  chassis.pid_drive_set(11_in, 50, true);
   chassis.pid_wait();
 
   chassis.pid_swing_set(ez::RIGHT_SWING, 3, 85, 25);
@@ -1338,6 +1338,7 @@ void blue_right() {
 
   pros::delay(2000);
 
+  intake.move(127); 
   intake2.move(0);
 
   middle.set(true);
@@ -1364,7 +1365,6 @@ void blue_right() {
   chassis.pid_drive_set(-14_in, 70, true);
   chassis.pid_wait();
 
-  intake.move(127);
   intake2.move(127);
 
   pros::delay(3000);
