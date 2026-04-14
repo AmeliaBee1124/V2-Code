@@ -1,87 +1,51 @@
 #include "main.h"
 
-/////
-// For installation, upgrading, documentations, and tutorials, check out our website!
-// https://ez-robotics.github.io/EZ-Template/
-/////
-
 // Chassis constructor
 ez::Drive chassis(
-    // These are your drive motors, the first motor is used for sensing!
-// These are your drive motors, the first motor is used for sensing!
-    // {-15,-16,-12},     // Left Chassis Ports (negative port will reverse it!)Songhao
-    // {14,13,11},  // Right Chassis Ports (negative port will reverse it!) 
-
-    // {-7,9,-12},     // Left Chassis Ports (negative port will reverse it!)Songhao 3rd
-    // {-20,10,8},  // Right Chassis Ports (negative port will reverse it!) 
-    //V3
-    //{20,-10,-8},     // Left Chassis Ports (negative port will reverse it!)Songhao 3rd
-    //{7,-9,12},  // Right Chassis Ports (negative port will reverse it!) 
-    //V4
 
     {-18,-19,20},  // Right Chassis Ports (negative port will reverse it!)
     {-12,13,11},     // Left Chassis Ports (negative port will reverse it!)Carl
 
     17,      // IMU Port
     2.75,  // Wheel Diameter (Remember, 4" wheels without screw holes are actually 4.125!)
-    450
+    450 // Drivetrain RPM
 
-// Uncomment the trackers you're using here!
+    // Put trackers here
 // - `8` and `9` are smart ports (making these negative will reverse the sensor)
 //  - you should get positive values on the encoders going FORWARD and RIGHT
-// - `2.75` is the wheel diameter
-// - `4.0` is the distance from the center of the wheel to the center of the robot
+
+// - `8` and `9` are smart ports (making these negative will reverse the sensor)
+//  - you should get positive values on the encoders going FORWARD and RIGHT
 
 );
 
 ez::tracking_wheel horiz_tracker(8, 2, 2.5);  // This tracking wheel is perpendicular to the drive wheels
 ez::tracking_wheel vert_tracker(9, 2, 3.75);   // This tracking wheel is parallel to the drive wheels
 
-/**
- * Runs initialization code. This occurs as soon as the program is started.
- *
- * All other competition modes are blocked by initialize; it is recommended
- * to keep execution time for this mode under a few seconds.
- */
+ // Runs initialization code. This occurs as soon as the program is started.
 void initialize() {
-  // Print our branding over your terminal :D
   ez::ez_template_print();
 
   pros::delay(500);  // Stop the user from doing anything while legacy ports configure
   middle.set(true);
-  // Look at your horizontal tracking wheel and decide if it's in front of the midline of your robot or behind it
-  //  - change `back` to `front` if the tracking wheel is in front of the midline
-  //  - ignore this if you aren't using a horizontal tracker
+  //  - change `back` to `front` if the horizontal tracking wheel is in front of the midline
   chassis.odom_tracker_back_set(&horiz_tracker);
-  // Look at your vertical tracking wheel and decide if it's to the left or right of the center of the robot
-  //  - change `left` to `right` if the tracking wheel is to the right of the centerline
-  //  - ignore this if you aren't using a vertical tracker
+  //  - change `left` to `right` if the vertical tracking wheel is to the right of the centerline
   chassis.odom_tracker_left_set(&vert_tracker);
 
-  // Configure your chassis controls
-  chassis.opcontrol_curve_buttons_toggle(true);   // Enables modifying the controller curve with buttons on the joysticks
+  chassis.opcontrol_curve_buttons_toggle(false);   // Enables modifying the controller curve with buttons on the joysticks
   chassis.opcontrol_drive_activebrake_set(0.0);   // Sets the active brake kP. We recommend ~2.  0 will disable.
   chassis.opcontrol_curve_default_set(0.0, 0.0);  // Defaults for curve. If using tank, only the first parameter is used. (Comment this line out if you have an SD card!)
 
-  // Set the drive to your own constants from autons.cpp!
   default_constants();
-
-  // These are already defaulted to these buttons, but you can change the left/right curve buttons here!
-  // chassis.opcontrol_curve_buttons_left_set(pros::E_CONTROLLER_DIGITAL_LEFT, pros::E_CONTROLLER_DIGITAL_RIGHT);  // If using tank, only the left side is used.
-  // chassis.opcontrol_curve_buttons_right_set(pros::E_CONTROLLER_DIGITAL_Y, pros::E_CONTROLLER_DIGITAL_A);
-
   // Autonomous Selector using LLEMU
   ez::as::auton_selector.autons_add({
-      {"Red left S\n\nRIGHT 7 BLOCK PUSH", red_left_S},
-      {"Red left S\n\nRIGHT 7 BLOCK PUSH", red_left_S},
-      {"Third Robot skills\n\ngood stuff and i (amelia) owe athena boba for lifeeeeeeeeeeeeeeeeeeeeeee", Main_Skills}, 
-      {"Backup 15 second\n\nLEFT 7 BLOCK PUSH", Backup_Skills_Right},
-      //{"Red Right C\n\nTwo blocks in Two goals", red_right_C},
-      {"Blue Right\n\nLEFT 4+3", blue_right},
-      //{"Red Right S\n\nTwo blocks in Two goals", red_right_S},
-      {"Red left C\n\nRIGHT 4+3", red_left_C},
+      {"Right 7\n\nRIGHT 7 BLOCK PUSH", red_left},
+      {"Skills\n\ngood stuff and i (amelia) owe athena boba for lifeeeeeeeeeeeeeeeeeeeeeee", Skills}, 
+      {"Left 7\n\nLEFT 7 BLOCK PUSH", Backup_Skills},
+      {"Left 4+3\n\nLEFT 4+3", blue_right},
+      {"Right 4+3\n\nRIGHT 4+3", red_left},
       {"Blue Left\n\nDo nothaing", blue_left},
-      // {"Reg skills\n\ncool stuff", Reg_skills},
   });
 
   // Initialize chassis and auton selector
@@ -130,19 +94,6 @@ void autonomous() {
   chassis.odom_xyt_set(0_in, 0_in, 0_deg);    // Set the current position, you can start at a specific position with this
   chassis.drive_brake_set(MOTOR_BRAKE_HOLD);  // Set motors to hold.  This helps autonomous consistency
 
-  /*
-  Odometry and Pure Pursuit are not magic
-
-  It is possible to get perfectly consistent results without tracking wheels,
-  but it is also possible to have extremely inconsistent results without tracking wheels.
-  When you don't use tracking wheels, you need to:
-   - avoid wheel slip
-   - avoid wheelies
-   - avoid throwing momentum around (super harsh turns, like in the example below)
-  You can do cool curved motions, but you have to give your robot the best chance
-  to be consistent
-  */
-
   ez::as::auton_selector.selected_auton_call();  // Calls selected auton from autonomous selector
 }
 
@@ -159,14 +110,8 @@ void screen_print_tracker(ez::tracking_wheel *tracker, std::string name, int lin
   ez::screen_print(tracker_value + tracker_width, line);  // Print final tracker text
 }
 
-/**
- * Ez screen task
- * Adding new pages here will let you view them during user control or autonomous
- * and will help you debug problems you're having
- */
 void ez_screen_task() {
   while (true) {
-    // Only run this when not connected to a competition switch
     if (!pros::competition::is_connected()) {
       // Blank page for odom debugging
       if (chassis.odom_enabled() && !chassis.pid_tuner_enabled()) {
@@ -178,7 +123,7 @@ void ez_screen_task() {
                                "\na: " + util::to_string_with_precision(chassis.odom_theta_get()),
                            1);  // Don't override the top Page line
 
-          // Display all trackers that are being used
+          // Displays all trackers that are being used
           screen_print_tracker(chassis.odom_tracker_left, "l", 4);
           screen_print_tracker(chassis.odom_tracker_right, "r", 5);
           screen_print_tracker(chassis.odom_tracker_back, "b", 6);
@@ -187,7 +132,7 @@ void ez_screen_task() {
       }
     }
 
-    // Remove all blank pages when connected to a comp switch
+    // Removes all blank pages when connected to a comp switch
     else {
       if (ez::as::page_blank_amount() > 0)
         ez::as::page_blank_remove_all();
@@ -198,13 +143,7 @@ void ez_screen_task() {
 }
 pros::Task ezScreenTask(ez_screen_task);
 
-/**
- * Gives you some extras to run in your opcontrol:
- * - run your autonomous routine in opcontrol by pressing DOWN and B
- *   - to prevent this from accidentally happening at a competition, this
- *     is only enabled when you're not connected to competition control.
- * - gives you a GUI to change your PID values live by pressing X
- */
+
 void ez_template_extras() {
   // Only run this when not connected to a competition switch
   if (!pros::competition::is_connected()) {
@@ -269,7 +208,7 @@ void opcontrol() {
 
 
 
-//.//
+// Macros and teliop commands//
     if (master.get_digital(DIGITAL_R1)) {
       intake.move(-127);
     } 
@@ -282,7 +221,6 @@ void opcontrol() {
     else {
       intake.move(0);
     }    
-//---------------//
     if (master.get_digital(DIGITAL_L2)) {
       intake2.move(-127);
     } 
@@ -298,13 +236,9 @@ void opcontrol() {
     else {
       intake2.move(0);
     }    
-    
-//---------------//
-
   if (master.get_digital_new_press(DIGITAL_DOWN)) {
     scrapper.set(!scrapper.get());
   } 
-//.//
   if (master.get_digital_new_press(DIGITAL_Y)) {
     hook.set(!hook.get());
   }
