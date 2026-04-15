@@ -42,9 +42,9 @@ void default_constants() {
   chassis.pid_angle_behavior_set(ez::shortest);  // Changes the default behavior for turning, this defaults it to the shortest path there
 }
 
-void Main_Skills() {
+void Skills() {
 
-=  chassis.drive_angle_set(0_deg);
+  chassis.drive_angle_set(0_deg);
   scrapper.set(true);
   hook.set(true);
   middle.set(true);
